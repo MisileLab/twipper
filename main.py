@@ -76,7 +76,16 @@ async def get_universal_id(request: Request, userid: str, twitch: bool):
 
 # I will make it
 def divide_elements(l: list, n: int = 100):
-    return []
+    i = 0
+    a = []
+    while True:
+        if len(a) <= i+100:
+            a.extend(l)
+            break
+        else:
+            a.extend(l[i:i+100])
+            del l[i:i+100]
+            i += 100
 
 async def main():
     c = loads(read_once("config.toml"))
@@ -90,8 +99,9 @@ async def main():
         streamers = [x for x in streamers if x["tid"] is not None]
         lstreamers = []
         for i in divide_elements(lstreamers):
-            response = get("https://api.twitch.tv/helix/streams", params={"user_login": streamers}, headers={"Authorization": f"Bearer {key}", "Client-id": c["twitch"]["id"]})
-            # TODO: get some live streamer
+            response: dict = get("https://api.twitch.tv/helix/streams", params={"user_login": streamers}, headers={"Authorization": f"Bearer {key}", "Client-id": c["twitch"]["id"]}).json()
+            if response.get("user_login", None) is not None:
+                lstreamers.append(response["user_login"])
         # TODO: check_and_insert()
         await sleep(600)
 
