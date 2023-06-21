@@ -10,7 +10,7 @@ readme = "README.md"
 python = "3.11.0"
 uvicorn = {extras = ["standard"], version = "0.21.0"}
 fastapi = "0.88.0"
-pymongo = "4.3.3"
+pymongo = "4.4.0"
 tomli = "2.0.1"
 misilelibpy = { path = "./misilelib-python" }
 requests = "2.28.2"
